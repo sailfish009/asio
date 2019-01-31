@@ -2,7 +2,7 @@
 // io_context.hpp
 // ~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2017 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2018 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -117,6 +117,35 @@ namespace detail {
  *   }
  * }
  * @endcode
+ *
+ * @par Submitting arbitrary tasks to the io_context
+ *
+ * To submit functions to the io_context, use the @ref asio::dispatch,
+ * @ref asio::post or @ref asio::defer free functions.
+ *
+ * For example:
+ *
+ * @code void my_task()
+ * {
+ *   ...
+ * }
+ *
+ * ...
+ *
+ * asio::io_context io_context;
+ *
+ * // Submit a function to the io_context.
+ * asio::post(io_context, my_task);
+ *
+ * // Submit a lambda object to the io_context.
+ * asio::post(io_context,
+ *     []()
+ *     {
+ *       ...
+ *     });
+ *
+ * // Run the io_context until it runs out of work.
+ * io_context.run(); @endcode
  *
  * @par Stopping the io_context from running out of work
  *
@@ -502,9 +531,9 @@ public:
    *
    * throws an exception.
    */
-  template <typename CompletionHandler>
-  ASIO_INITFN_RESULT_TYPE(CompletionHandler, void ())
-  dispatch(ASIO_MOVE_ARG(CompletionHandler) handler);
+  template <typename LegacyCompletionHandler>
+  ASIO_INITFN_RESULT_TYPE(LegacyCompletionHandler, void ())
+  dispatch(ASIO_MOVE_ARG(LegacyCompletionHandler) handler);
 
   /// (Deprecated: Use asio::post().) Request the io_context to invoke
   /// the given handler and return immediately.
@@ -529,9 +558,9 @@ public:
    *
    * throws an exception.
    */
-  template <typename CompletionHandler>
-  ASIO_INITFN_RESULT_TYPE(CompletionHandler, void ())
-  post(ASIO_MOVE_ARG(CompletionHandler) handler);
+  template <typename LegacyCompletionHandler>
+  ASIO_INITFN_RESULT_TYPE(LegacyCompletionHandler, void ())
+  post(ASIO_MOVE_ARG(LegacyCompletionHandler) handler);
 
   /// (Deprecated: Use asio::bind_executor().) Create a new handler that
   /// automatically dispatches the wrapped handler on the io_context.

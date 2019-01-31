@@ -2,7 +2,7 @@
 // impl/use_future.hpp
 // ~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2017 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2018 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -16,7 +16,6 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
-#include <future>
 #include <tuple>
 #include "asio/async_result.hpp"
 #include "asio/detail/memory.hpp"
@@ -543,6 +542,8 @@ template <typename Arg>
 class promise_handler_selector<void(std::exception_ptr, Arg)>
   : public promise_handler_ex_1<Arg> {};
 
+#if defined(ASIO_HAS_VARIADIC_TEMPLATES)
+
 template <typename... Arg>
 class promise_handler_selector<void(Arg...)>
   : public promise_handler_n<std::tuple<Arg...> > {};
@@ -554,6 +555,32 @@ class promise_handler_selector<void(asio::error_code, Arg...)>
 template <typename... Arg>
 class promise_handler_selector<void(std::exception_ptr, Arg...)>
   : public promise_handler_ex_n<std::tuple<Arg...> > {};
+
+#else // defined(ASIO_HAS_VARIADIC_TEMPLATES)
+
+#define ASIO_PRIVATE_PROMISE_SELECTOR_DEF(n) \
+  template <typename Arg, ASIO_VARIADIC_TPARAMS(n)> \
+  class promise_handler_selector< \
+    void(Arg, ASIO_VARIADIC_TARGS(n))> \
+      : public promise_handler_n< \
+        std::tuple<Arg, ASIO_VARIADIC_TARGS(n)> > {}; \
+  \
+  template <typename Arg, ASIO_VARIADIC_TPARAMS(n)> \
+  class promise_handler_selector< \
+    void(asio::error_code, Arg, ASIO_VARIADIC_TARGS(n))> \
+      : public promise_handler_ec_n< \
+        std::tuple<Arg, ASIO_VARIADIC_TARGS(n)> > {}; \
+  \
+  template <typename Arg, ASIO_VARIADIC_TPARAMS(n)> \
+  class promise_handler_selector< \
+    void(std::exception_ptr, Arg, ASIO_VARIADIC_TARGS(n))> \
+      : public promise_handler_ex_n< \
+        std::tuple<Arg, ASIO_VARIADIC_TARGS(n)> > {}; \
+  /**/
+  ASIO_VARIADIC_GENERATE(ASIO_PRIVATE_PROMISE_SELECTOR_DEF)
+#undef ASIO_PRIVATE_PROMISE_SELECTOR_DEF
+
+#endif // defined(ASIO_HAS_VARIADIC_TEMPLATES)
 
 // Completion handlers produced from the use_future completion token, when not
 // using use_future::operator().

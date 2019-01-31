@@ -2,7 +2,7 @@
 // read_until.hpp
 // ~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2017 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2018 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -67,9 +67,10 @@ struct is_match_condition
 /**
  * @defgroup read_until asio::read_until
  *
- * @brief Read data into a dynamic buffer sequence, or into a streambuf, until
- * it contains a delimiter, matches a regular expression, or a function object
- * indicates a match.
+ * @brief The @c read_until function is a composed operation that reads data
+ * into a dynamic buffer sequence, or into a streambuf, until it contains a
+ * delimiter, matches a regular expression, or a function object indicates a
+ * match.
  */
 /*@{*/
 
@@ -584,8 +585,8 @@ std::size_t read_until(SyncReadStream& s,
  * contains the delimiter:
  * @code { 'a', 'b', ..., 'c', '\n', 'd', 'e', ... } @endcode
  * The call to @c std::getline then extracts the data up to and including the
- * delimiter, so that the string @c line contains:
- * @code { 'a', 'b', ..., 'c', '\n' } @endcode
+ * newline (which is discarded), so that the string @c line contains:
+ * @code { 'a', 'b', ..., 'c' } @endcode
  * The remaining data is left in the buffer @c b as follows:
  * @code { 'd', 'e', ... } @endcode
  * This data may be the start of a new line, to be extracted by a subsequent
@@ -671,8 +672,8 @@ std::size_t read_until(SyncReadStream& s,
  * contains the delimiter:
  * @code { 'a', 'b', ..., 'c', '\r', '\n', 'd', 'e', ... } @endcode
  * The call to @c std::getline then extracts the data up to and including the
- * delimiter, so that the string @c line contains:
- * @code { 'a', 'b', ..., 'c', '\r', '\n' } @endcode
+ * newline (which is discarded), so that the string @c line contains:
+ * @code { 'a', 'b', ..., 'c', '\r' } @endcode
  * The remaining data is left in the buffer @c b as follows:
  * @code { 'd', 'e', ... } @endcode
  * This data may be the start of a new line, to be extracted by a subsequent
@@ -764,8 +765,8 @@ std::size_t read_until(SyncReadStream& s,
  * contains the data which matched the regular expression:
  * @code { 'a', 'b', ..., 'c', '\r', '\n', 'd', 'e', ... } @endcode
  * The call to @c std::getline then extracts the data up to and including the
- * match, so that the string @c line contains:
- * @code { 'a', 'b', ..., 'c', '\r', '\n' } @endcode
+ * newline (which is discarded), so that the string @c line contains:
+ * @code { 'a', 'b', ..., 'c', '\r' } @endcode
  * The remaining data is left in the buffer @c b as follows:
  * @code { 'd', 'e', ... } @endcode
  * This data may be the start of a new line, to be extracted by a subsequent
@@ -985,9 +986,10 @@ std::size_t read_until(SyncReadStream& s,
 /**
  * @defgroup async_read_until asio::async_read_until
  *
- * @brief Start an asynchronous operation to read data into a dynamic buffer
- * sequence, or into a streambuf, until it contains a delimiter, matches a
- * regular expression, or a function object indicates a match.
+ * @brief The @c async_read_until function is a composed asynchronous operation
+ * that reads data into a dynamic buffer sequence, or into a streambuf, until
+ * it contains a delimiter, matches a regular expression, or a function object
+ * indicates a match.
  */
 /*@{*/
 
@@ -1483,8 +1485,8 @@ async_read_until(AsyncReadStream& s,
  * @c b contains the delimiter:
  * @code { 'a', 'b', ..., 'c', '\n', 'd', 'e', ... } @endcode
  * The call to @c std::getline then extracts the data up to and including the
- * delimiter, so that the string @c line contains:
- * @code { 'a', 'b', ..., 'c', '\n' } @endcode
+ * newline (which is discarded), so that the string @c line contains:
+ * @code { 'a', 'b', ..., 'c' } @endcode
  * The remaining data is left in the buffer @c b as follows:
  * @code { 'd', 'e', ... } @endcode
  * This data may be the start of a new line, to be extracted by a subsequent
@@ -1568,8 +1570,8 @@ async_read_until(AsyncReadStream& s,
  * @c b contains the delimiter:
  * @code { 'a', 'b', ..., 'c', '\r', '\n', 'd', 'e', ... } @endcode
  * The call to @c std::getline then extracts the data up to and including the
- * delimiter, so that the string @c line contains:
- * @code { 'a', 'b', ..., 'c', '\r', '\n' } @endcode
+ * newline (which is discarded), so that the string @c line contains:
+ * @code { 'a', 'b', ..., 'c', '\r' } @endcode
  * The remaining data is left in the buffer @c b as follows:
  * @code { 'd', 'e', ... } @endcode
  * This data may be the start of a new line, to be extracted by a subsequent
@@ -1661,8 +1663,8 @@ async_read_until(AsyncReadStream& s,
  * @c b contains the data which matched the regular expression:
  * @code { 'a', 'b', ..., 'c', '\r', '\n', 'd', 'e', ... } @endcode
  * The call to @c std::getline then extracts the data up to and including the
- * match, so that the string @c line contains:
- * @code { 'a', 'b', ..., 'c', '\r', '\n' } @endcode
+ * newline (which is discarded), so that the string @c line contains:
+ * @code { 'a', 'b', ..., 'c', '\r' } @endcode
  * The remaining data is left in the buffer @c b as follows:
  * @code { 'd', 'e', ... } @endcode
  * This data may be the start of a new line, to be extracted by a subsequent

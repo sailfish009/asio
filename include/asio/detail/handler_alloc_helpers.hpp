@@ -2,7 +2,7 @@
 // detail/handler_alloc_helpers.hpp
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2017 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2018 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -170,14 +170,6 @@ struct get_hook_allocator<Handler, std::allocator<T> >
     } \
     void reset() \
     { \
-      typedef typename ::asio::associated_allocator< \
-        Handler>::type associated_allocator_type; \
-      typedef typename ::asio::detail::get_hook_allocator< \
-        Handler, associated_allocator_type>::type hook_allocator_type; \
-      ASIO_REBIND_ALLOC(hook_allocator_type, op) a( \
-            ::asio::detail::get_hook_allocator< \
-              Handler, associated_allocator_type>::get( \
-                *h, ::asio::get_associated_allocator(*h))); \
       if (p) \
       { \
         p->~op(); \
@@ -185,6 +177,14 @@ struct get_hook_allocator<Handler, std::allocator<T> >
       } \
       if (v) \
       { \
+        typedef typename ::asio::associated_allocator< \
+          Handler>::type associated_allocator_type; \
+        typedef typename ::asio::detail::get_hook_allocator< \
+          Handler, associated_allocator_type>::type hook_allocator_type; \
+        ASIO_REBIND_ALLOC(hook_allocator_type, op) a( \
+              ::asio::detail::get_hook_allocator< \
+                Handler, associated_allocator_type>::get( \
+                  *h, ::asio::get_associated_allocator(*h))); \
         a.deallocate(static_cast<op*>(v), 1); \
         v = 0; \
       } \
@@ -212,10 +212,6 @@ struct get_hook_allocator<Handler, std::allocator<T> >
     } \
     void reset() \
     { \
-      typedef typename ::asio::detail::get_recycling_allocator< \
-        Alloc>::type recycling_allocator_type; \
-      ASIO_REBIND_ALLOC(recycling_allocator_type, op) a1( \
-            ::asio::detail::get_recycling_allocator<Alloc>::get(*a)); \
       if (p) \
       { \
         p->~op(); \
@@ -223,6 +219,10 @@ struct get_hook_allocator<Handler, std::allocator<T> >
       } \
       if (v) \
       { \
+        typedef typename ::asio::detail::get_recycling_allocator< \
+          Alloc>::type recycling_allocator_type; \
+        ASIO_REBIND_ALLOC(recycling_allocator_type, op) a1( \
+              ::asio::detail::get_recycling_allocator<Alloc>::get(*a)); \
         a1.deallocate(static_cast<op*>(v), 1); \
         v = 0; \
       } \
