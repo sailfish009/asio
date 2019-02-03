@@ -2,17 +2,29 @@
 Asio C++ Library
 
 #define ASIO_STANDALONE
+
 #define ASIO_HAS_STD_ADDRESSOF
+
 #define ASIO_HAS_STD_ARRAY
+
 #define ASIO_HAS_CSTDINT
+
 #define ASIO_HAS_CO_AWAIT
+
 #define ASIO_HAS_STD_SHARED_PTR
+
 #define ASIO_HAS_STD_TYPE_TRAITS
+
 #define ASIO_HAS_VARIADIC_TEMPLATES
+
 #define ASIO_HAS_STD_FUNCTION
+
 #define ASIO_HAS_STD_CHRONO
+
 #define BOOST_ALL_NO_LIB
+
 #define _WIN32_WINNT 0x0601
+
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 repackage the library with cmake
